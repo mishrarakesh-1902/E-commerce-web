@@ -554,20 +554,4 @@ npx vite build --config vite-keycloak.config.js
   - `@vue/eslint-config-prettier`
   - `plugin:cypress/recommended` (for `*.cy.ts` test files)
 
----
 
-## 🤝 Contributing
-
-Contributions, issues, and feature requests are welcome!
-
-1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your Changes (`git commit -m 'feat: add some AmazingFeature'`)
-4. Run Linter & Tests (`npm run lint && npm run test:unit`)
-5. Push to the Branch (`git push origin feature/AmazingFeature`)
-6. Open a Pull Request
-
-
-
-
->>>>>>> 45b78308ada366dcb4f0b83694f065f5f3a792e6
