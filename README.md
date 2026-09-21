@@ -306,6 +306,7 @@ The store will be live at: **`http://localhost:6429`**.
 
 ---
 
+<<<<<<< HEAD
 ## 👥 Authors & Acknowledgments
 
 - **Rakesh Mishra** - [GitHub Profile](https://github.com/mishrarakesh-1902)
@@ -317,3 +318,256 @@ The store will be live at: **`http://localhost:6429`**.
 ## 📄 License
 
 This project is licensed under the **MIT License** - see the `LICENSE` file for details.
+=======
+## 🧩 Core Workflows & Patterns
+
+### 1. Data Fetching & Server State (TanStack Query)
+
+Server state is managed through TanStack Vue Query hooks located in `src/queries/`.
+
+#### Defining a Query Key Enum:
+```typescript
+// src/queries/QueryKey.enum.ts
+export enum QueryKey {
+  Product = "Product",
+  User = "User",
+}
+```
+
+#### Creating a Query Hook:
+```typescript
+// src/queries/useProductQuery.ts
+import { get } from "@/services/http";
+import { APIResponse } from "@/services/http/types/APIResponse";
+import { useQuery } from "@tanstack/vue-query";
+import { QueryKey } from "@/queries/QueryKey.enum";
+
+export const useQuestionStepQuery = (code?: string | number) =>
+  useQuery({
+    queryKey: [QueryKey.Product, { locale: localStorage.locale }],
+    queryFn: () => get<APIResponse>(`/http/${code ? code : 200}/Hello World`),
+  });
+```
+
+#### Using in a Component (`<script setup>`):
+```vue
+<script setup lang="ts">
+import { useQuestionStepQuery } from "@/queries/useProductQuery";
+
+const { isLoading, isError, data } = useQuestionStepQuery();
+</script>
+
+<template>
+  <div v-if="isLoading">{{ $t("loading") }}</div>
+  <div v-else-if="isError">{{ $t("error") }}</div>
+  <div v-else data-cy="home-content">{{ data?.message }}</div>
+</template>
+```
+
+---
+
+### 2. Type-Safe HTTP Client (`services/http`)
+
+The custom HTTP client in `src/services/http/` wraps the browser's native `fetch` API. Unlike native `fetch`, it rejects when non-2xx HTTP status codes are received, throwing a typed `ResponseStatusError`.
+
+```typescript
+import { post, ResponseStatusError } from "@/services/http";
+
+interface LoginPayload {
+  email: string;
+  pass: string;
+}
+
+interface AuthResponse {
+  token: string;
+}
+
+export const authenticate = async (credentials: LoginPayload): Promise<string | null> => {
+  try {
+    const res = await post<LoginPayload, AuthResponse>("/auth/login", credentials);
+    return res.token;
+  } catch (error) {
+    if (error instanceof ResponseStatusError && error.status === 401) {
+      console.warn("Unauthorized access");
+    }
+    throw error;
+  }
+};
+```
+
+---
+
+### 3. Internationalization (Vue I18n) & RTL Support
+
+The project includes pre-configured internationalization supporting dynamic language switching, datetime localization, and bidirectional text flow (LTR/RTL).
+
+#### Adding a New Translation Key
+1. Add the key in `src/locales/en-US.json`:
+   ```json
+   {
+     "welcome": "Welcome",
+     "dashboard": "Dashboard"
+   }
+   ```
+2. Add the corresponding key in `src/locales/zh-CN.json`:
+   ```json
+   {
+     "welcome": "欢迎",
+     "dashboard": "仪表板"
+   }
+   ```
+
+#### Adding a New Language
+1. Add the code to `LocaleCode` in `src/const/locale.ts`:
+   ```typescript
+   export enum LocaleCode {
+     ZH_CN = "zh-CN",
+     EN_US = "en-US",
+     AR_SA = "ar-SA", // Example: Arabic
+   }
+
+   export const LOCALE = {
+     [LocaleCode.ZH_CN]: { dir: "ltr", name: "中文" },
+     [LocaleCode.EN_US]: { dir: "ltr", name: "English" },
+     [LocaleCode.AR_SA]: { dir: "rtl", name: "العربية" },
+   } as const;
+   ```
+2. Create the file `src/locales/ar-SA.json`.
+3. When selected in `LocaleChanger.vue`, `setDocumentLang` will automatically set `<html dir="rtl">` and `<html lang="ar-SA">`.
+
+#### Checking for Missing Translations
+Run the extraction tool anytime to find missing or unused keys:
+```bash
+npm run i18n:report
+```
+
+---
+
+### 4. Routing, SEO & Dynamic Titles
+
+Routes are defined in `src/router/routes/` with strongly typed route enums in `src/router/routes.enum.ts`.
+
+#### Defining a Route:
+```typescript
+// src/router/routes/homeRoute.ts
+import { Route } from "@/router/routes.enum";
+import HomeView from "@/views/HomeView.vue";
+
+export const homeRoute = {
+  name: Route.Home,
+  path: "/",
+  alias: "/home",
+  component: HomeView,
+  meta: {
+    metaTags: [{ name: "description", content: "Home page description" }],
+  },
+};
+```
+
+#### Automatic Page Title Updates & Scroll Behavior
+In `src/plugins/router.ts`, route transitions automatically update the document title and smoothly handle scroll restoration:
+- Smooth scrolling to anchor hashes (e.g., `#section-1`).
+- Saved position restoration on browser back/forward navigation.
+- Automatic reset to `{ top: 0 }` on new page visits.
+
+---
+
+### 5. Testing Strategy (Cypress & Vitest)
+
+#### Component Testing with Cypress
+Mount components in isolation with Pinia and i18n plugins:
+
+```typescript
+// src/components/__tests__/LocaleChanger.cy.ts
+import { createPinia } from "pinia";
+import i18n from "@/plugins/i18n";
+import LocaleChanger from "../LocaleChanger.vue";
+import { LocaleCode } from "@/const/locale";
+
+describe("Locale Changer Component", () => {
+  it("Should change locale to 中文", () => {
+    cy.mount(LocaleChanger, {
+      extensions: { use: [i18n, createPinia()] },
+    });
+
+    cy.dataCy("locale-changer")
+      .get("select")
+      .select("中文")
+      .should("have.value", LocaleCode.ZH_CN);
+  });
+});
+```
+
+#### End-to-End Testing with Cypress
+Mock network responses and assert full application behavior:
+
+```typescript
+// cypress/e2e/home.cy.ts
+describe("Home Page E2E", () => {
+  it("should intercept network request and render message", () => {
+    cy.intercept("GET", "https://dummyjson.com/http/200/Hello%20World", {
+      statusCode: 200,
+      fixture: "../fixtures/data.json",
+    }).as("getData");
+
+    cy.visit("/home")
+      .wait("@getData")
+      .dataCy("home-content")
+      .should("exist")
+      .should("contain.text", "Hello World");
+  });
+});
+```
+
+> [!TIP]
+> Use the custom `cy.dataCy('element-id')` command instead of CSS classes or brittle tag selectors to ensure tests are resilient to styling refactors.
+
+---
+
+### 6. Keycloak Styles Bundler
+
+The template includes a dedicated Vite build configuration (`vite-keycloak.config.js`) configured to compile custom styles for Keycloak login pages:
+
+- **Source**: `src/keycloak.ts` (imports `src/styles/keycloak.scss`)
+- **Target**: ESNext library bundle
+- **Config**: `vite-keycloak.config.js`
+
+To run the Keycloak build:
+```bash
+npx vite build --config vite-keycloak.config.js
+```
+
+---
+
+## ⚙️ Configuration Reference
+
+### TypeScript Aliases (`tsconfig.json`)
+- `@/*` resolves to `src/*`
+- `@cy/*` resolves to `cypress/*`
+
+### ESLint Rules (`.eslintrc.js`)
+- Extends:
+  - `@tanstack/eslint-plugin-query/recommended`
+  - `plugin:vue/vue3-essential`
+  - `eslint:recommended`
+  - `@vue/eslint-config-typescript/recommended`
+  - `@vue/eslint-config-prettier`
+  - `plugin:cypress/recommended` (for `*.cy.ts` test files)
+
+---
+
+## 🤝 Contributing
+
+Contributions, issues, and feature requests are welcome!
+
+1. Fork the Project
+2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your Changes (`git commit -m 'feat: add some AmazingFeature'`)
+4. Run Linter & Tests (`npm run lint && npm run test:unit`)
+5. Push to the Branch (`git push origin feature/AmazingFeature`)
+6. Open a Pull Request
+
+
+
+
+>>>>>>> 45b78308ada366dcb4f0b83694f065f5f3a792e6
