@@ -562,15 +562,6 @@ Contributions, issues, and feature requests are welcome!
 5. Push to the Branch (`git push origin feature/AmazingFeature`)
 6. Open a Pull Request
 
----
 
-## 👥 Authors & Acknowledgments
 
-- **Miguel Bento** - [mr-monkey.net](https://mr-monkey.net/)
-- **Joost Kersjes**
 
----
-
-## 📄 License
-
-This project is licensed under the **MIT License** - see the [LICENSE](file:///c:/Users/mishr/Downloads/ts-vite-vue-3-pinia-cypress-vitest-vue-query-eslint-prettier-sass-i18n-main/ts-vite-vue-3-pinia-cypress-vitest-vue-query-eslint-prettier-sass-i18n-main/package.json) file for details.
