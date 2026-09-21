@@ -24,7 +24,8 @@
     ],
     "paths": {
       "@/*": ["src/*"],
-      "@cy/*": ["cypress/*"]
+      "@tests/*": ["tests/*"],
+      "@cy/*": ["tests/*"]
     },
     "lib": ["esnext", "dom", "dom.iterable", "scripthost"]
   },
@@ -33,6 +34,7 @@
     "env.d.ts",
     "src/**/*",
     "src/**/*.vue",
-    "./cypress.d.ts"
+    "./cypress.d.ts",
+    "tests/**/*"
   ]
 }

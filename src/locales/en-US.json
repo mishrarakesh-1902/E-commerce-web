@@ -1,7 +1,12 @@
 {
-  "welcome": "Welcome",
+  "welcome": "Welcome to E-Commerce Store",
   "home": "Home",
-  "404": "Not Found",
-  "loading": "loading",
+  "products": "Products",
+  "cart": "Cart",
+  "404": "Page Not Found",
+  "loading": "Loading...",
   "error": "Something went wrong",
+  "add_to_cart": "Add to Cart",
+  "checkout": "Proceed to Checkout",
+  "empty_cart": "Your shopping cart is currently empty."
 }

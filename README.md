@@ -1,11 +1,11 @@
-# 🚀 Vue 3 Enterprise Starter Template
+# 🛍️ E-Commerce Web Application Starter
 
 <p align="center">
   <img src="https://upload.wikimedia.org/wikipedia/commons/9/95/Vue.js_Logo_2.svg" alt="Vue 3 Logo" width="100" height="100" />
 </p>
 
 <p align="center">
-  <strong>A production-ready, highly opinionated, full-featured enterprise frontend boilerplate.</strong><br>
+  <strong>A modern, enterprise-grade E-Commerce web application boilerplate.</strong><br>
   Built with Vue 3 (Composition API & `<script setup>`), TypeScript, Vite 4, Pinia, TanStack Vue Query, Vue Router, Cypress, Vitest, Sass, and Vue I18n.
 </p>
 
@@ -54,9 +54,9 @@
 
 ## 🌟 Overview
 
-This repository provides an enterprise-grade starter boilerplate designed for scalable, maintainable, and high-performance web applications. It brings together modern Vue 3 tooling, strict TypeScript typing, decoupled service layers, automated multi-tier testing, advanced internationalization, and optimized asset bundling.
+**E-Commerce Web** is an enterprise-grade starter boilerplate tailored for scalable, maintainable, and high-performance online storefronts and web applications. It brings together modern Vue 3 tooling, strict TypeScript typing, decoupled service layers, automated multi-tier testing, advanced internationalization, and optimized asset bundling.
 
-Whether you are kickstarting an enterprise dashboard, customer portal, SaaS application, or single-page app (SPA), this template provides solid foundations, consistent design patterns, and clean separation of concerns out of the box.
+Whether you are building a full online store, digital product catalogue, dashboard, or SaaS portal, this template provides solid foundations, consistent design patterns, and clean separation of concerns out of the box.
 
 ---
 
@@ -64,7 +64,7 @@ Whether you are kickstarting an enterprise dashboard, customer portal, SaaS appl
 
 - **⚡ Blazing Fast Build & HMR**: Powered by [Vite 4](https://vitejs.dev/) with instantaneous Hot Module Replacement and ESNext build targets.
 - **🛡️ Strict Type Safety**: End-to-end TypeScript compilation with `vue-tsc`, global component typing (`components.d.ts`), and strict tsconfig rules.
-- **🧩 Vue 3 Composition API**: Component architecture leveraging `<script setup lang="ts">`, reactive refs, and lifecycle hooks.
+- **🧩 Vue 3 Composition API**: Modern component architecture leveraging `<script setup lang="ts">`, reactive refs, and lifecycle hooks.
 - **🍍 Pinia State Management**: Lightweight, intuitive, and fully type-safe central store management.
 - **🔄 Server State with TanStack Vue Query**: Automatic caching (3-minute default stale time), background refetching control, reactive query invalidation, and query key enums.
 - **🌐 Internationalization (Vue I18n 9 + Unplugin)**:
@@ -114,14 +114,14 @@ The project strictly follows the **Separation of Concerns** principle. UI compon
 ```mermaid
 flowchart TD
     subgraph UI Layer
-        V[Views / Pages e.g., HomeView.vue]
-        C[Components e.g., LocaleChanger.vue]
+        V[Views / Pages: HomeView, ProductsView, CartView, NotFoundView]
+        C[Components: LocaleChanger, etc.]
     end
 
     subgraph State & Query Layer
         P[Pinia Stores Client State]
-        VQ[TanStack Vue Query Hooks e.g., useQuestionStepQuery]
-        QK[Query Key Enums e.g., QueryKey.Product]
+        VQ[TanStack Vue Query Hooks: useProductQuery]
+        QK[Query Key Enums: QueryKey.Products, QueryKey.Cart]
     end
 
     subgraph Service & Network Layer
@@ -144,14 +144,6 @@ flowchart TD
     CF --> API
 ```
 
-### Key Architectural Rules
-
-1. **Components (`src/components/`, `src/views/`)**: Handle UI rendering, reactive bindings, user interaction, and transition animations.
-2. **Query Hooks (`src/queries/`)**: Encapsulate async queries/mutations with `@tanstack/vue-query`. Query keys are strongly typed via enums.
-3. **HTTP Service (`src/services/http/`)**: Encapsulates `fetch` operations, query string serialization, headers, and request options. Throws `ResponseStatusError` on non-2xx responses.
-4. **Plugins (`src/plugins/`)**: Initialize and configure plugins (Vue Router, Pinia, Vue Query, Vue I18n) cleanly before registering them on the Vue application instance.
-5. **Utilities (`src/util/`)**: Pure helper functions for browser APIs (`localStorage`, `document.documentElement`).
-
 ---
 
 ## 📂 Directory Structure
@@ -159,10 +151,10 @@ flowchart TD
 ```text
 .
 ├── .browserslistrc          # Browser compatibility matrix
-├── .env                     # Environment variables (VITE_API, etc.)
+├── .env.example             # Template for environment variables
 ├── .eslintignore            # Files ignored by ESLint
 ├── .eslintrc.js             # ESLint configuration with Vue, TS, and Cypress rules
-├── .gitignore               # Git ignored paths
+├── .gitignore               # Git ignored paths (caches, build, local envs)
 ├── .prettierrc              # Prettier formatting rules
 ├── README.md                # Project documentation
 ├── index.html               # Main HTML entry point with PWA meta & favicon links
@@ -175,7 +167,8 @@ flowchart TD
 ├── env.d.ts                 # Vite client type references
 ├── cypress/                 # Cypress test suites and fixtures
 │   ├── e2e/                 # End-to-End test specs (*.cy.ts)
-│   │   └── home.cy.ts       # E2E test verifying API interception and navigation
+│   │   ├── home.cy.ts       # E2E test verifying API interception and navigation
+│   │   └── products.cy.ts   # E2E test verifying products catalog view
 │   ├── fixtures/            # Static test mock data (JSON fixtures)
 │   │   └── data.json        # Mock response fixture
 │   ├── support/             # Cypress support files
@@ -191,7 +184,7 @@ flowchart TD
 │   ├── browserconfig.xml    # Windows tile configuration
 │   └── manifest.json        # Web App Manifest for PWA installation
 └── src/                     # Application source code
-    ├── App.vue              # Root Vue component with navigation & LocaleChanger
+    ├── App.vue              # Root Vue component with header navigation & LocaleChanger
     ├── components.d.ts      # Global component declarations for vue-tsc
     ├── keycloak.ts          # Keycloak theme entry point
     ├── main.ts              # Application bootstrap entry point
@@ -203,21 +196,23 @@ flowchart TD
     ├── const/               # Application constants & enums
     │   └── locale.ts        # LocaleCode enum & LOCALE configuration (names, dir)
     ├── locales/             # Internationalization message bundles
-    │   ├── en-US.json       # English translations
+    │   ├── en-US.json       # English translations (e-commerce catalog, cart, UI)
     │   └── zh-CN.json       # Simplified Chinese translations
     ├── plugins/             # Application plugin initializers
     │   ├── i18n.ts          # Vue I18n instance with fallback and datetime formats
     │   ├── queryClient.ts   # TanStack QueryClient with default cache options
     │   └── router.ts        # Vue Router instance with scroll behavior & page titles
     ├── queries/             # Server state queries & mutations
-    │   ├── QueryKey.enum.ts # Strongly typed query key enums
-    │   └── useProductQuery.ts # Vue Query hook using HTTP service
+    │   ├── QueryKey.enum.ts # Strongly typed query key enums (Product, Products, Cart)
+    │   └── useProductQuery.ts # Vue Query hook using typed HTTP service
     ├── router/              # Route definitions & enums
-    │   ├── routes.enum.ts   # Route names enum
+    │   ├── routes.enum.ts   # Route names enum (Home, Products, Cart, NotFound)
     │   └── routes/          # Modular route records
-    │       ├── homeRoute.ts # Home route definition with SEO meta
-    │       ├── index.ts     # Aggregated route list
-    │       └── notFound.ts  # Catch-all 404 route definition
+    │       ├── homeRoute.ts     # Home route definition
+    │       ├── productsRoute.ts # Products catalog route definition
+    │       ├── cartRoute.ts     # Shopping cart route definition
+    │       ├── notFoundRoute.ts # 404 Catch-all route definition
+    │       └── index.ts         # Aggregated route array
     ├── services/            # Core business & infrastructure services
     │   └── http/            # Native Fetch-based HTTP Client
     │       ├── README.md    # HTTP service usage documentation
@@ -243,8 +238,10 @@ flowchart TD
     │   ├── setDocumentLang.ts       # Updates <html lang> and <html dir> attributes
     │   └── setLocalStorageLocale.ts # Reads/writes active locale in localStorage
     └── views/               # Page views / Router targets
-        ├── 404.vue          # Not Found page view
-        └── HomeView.vue     # Home view demonstrating async query and transitions
+        ├── HomeView.vue     # Home view with async query & hero call-to-actions
+        ├── ProductsView.vue # E-commerce products listing & catalog grid
+        ├── CartView.vue     # Shopping cart view with item summary
+        └── NotFoundView.vue # 404 Not Found error page
 ```
 
 ---
@@ -259,14 +256,12 @@ Ensure your development environment meets the following requirements:
 
 ### Installation
 
-Clone the repository and install all dependencies:
-
 ```bash
-# Clone the repository
-git clone https://github.com/your-org/your-repo.git
+# Clone repository
+git clone https://github.com/mishrarakesh-1902/E-commerce-web.git
 
-# Navigate into the project directory
-cd ts-vite-vue-3-pinia-cypress-vitest-vue-query-eslint-prettier-sass-i18n-main
+# Navigate into project directory
+cd E-commerce-web
 
 # Install dependencies
 npm install
@@ -274,31 +269,28 @@ npm install
 
 ### Environment Variables
 
-The project uses Vite's environment variable mechanism (`.env`). Create or edit `.env` in the project root:
+Copy `.env.example` to `.env`:
+
+```bash
+cp .env.example .env
+```
 
 ```env
 # Base URL for API requests
 VITE_API=https://dummyjson.com
 ```
 
-> [!NOTE]
-> All custom environment variables exposed to client-side code must start with the `VITE_` prefix.
-
 ### Running Development Server
-
-Start the local Vite development server:
 
 ```bash
 npm run dev
 ```
 
-The application will be accessible at: **`http://localhost:6429`** (or the next available port).
+The store will be live at: **`http://localhost:6429`**.
 
 ---
 
 ## 📜 Available Scripts
-
-The following npm scripts are configured in [`package.json`](file:///c:/Users/mishr/Downloads/ts-vite-vue-3-pinia-cypress-vitest-vue-query-eslint-prettier-sass-i18n-main/ts-vite-vue-3-pinia-cypress-vitest-vue-query-eslint-prettier-sass-i18n-main/package.json):
 
 | Command | Purpose | Details |
 | :--- | :--- | :--- |
@@ -314,258 +306,9 @@ The following npm scripts are configured in [`package.json`](file:///c:/Users/mi
 
 ---
 
-## 🧩 Core Workflows & Patterns
-
-### 1. Data Fetching & Server State (TanStack Query)
-
-Server state is managed through TanStack Vue Query hooks located in `src/queries/`.
-
-#### Defining a Query Key Enum:
-```typescript
-// src/queries/QueryKey.enum.ts
-export enum QueryKey {
-  Product = "Product",
-  User = "User",
-}
-```
-
-#### Creating a Query Hook:
-```typescript
-// src/queries/useProductQuery.ts
-import { get } from "@/services/http";
-import { APIResponse } from "@/services/http/types/APIResponse";
-import { useQuery } from "@tanstack/vue-query";
-import { QueryKey } from "@/queries/QueryKey.enum";
-
-export const useQuestionStepQuery = (code?: string | number) =>
-  useQuery({
-    queryKey: [QueryKey.Product, { locale: localStorage.locale }],
-    queryFn: () => get<APIResponse>(`/http/${code ? code : 200}/Hello World`),
-  });
-```
-
-#### Using in a Component (`<script setup>`):
-```vue
-<script setup lang="ts">
-import { useQuestionStepQuery } from "@/queries/useProductQuery";
-
-const { isLoading, isError, data } = useQuestionStepQuery();
-</script>
-
-<template>
-  <div v-if="isLoading">{{ $t("loading") }}</div>
-  <div v-else-if="isError">{{ $t("error") }}</div>
-  <div v-else data-cy="home-content">{{ data?.message }}</div>
-</template>
-```
-
----
-
-### 2. Type-Safe HTTP Client (`services/http`)
-
-The custom HTTP client in `src/services/http/` wraps the browser's native `fetch` API. Unlike native `fetch`, it rejects when non-2xx HTTP status codes are received, throwing a typed `ResponseStatusError`.
-
-```typescript
-import { post, ResponseStatusError } from "@/services/http";
-
-interface LoginPayload {
-  email: string;
-  pass: string;
-}
-
-interface AuthResponse {
-  token: string;
-}
-
-export const authenticate = async (credentials: LoginPayload): Promise<string | null> => {
-  try {
-    const res = await post<LoginPayload, AuthResponse>("/auth/login", credentials);
-    return res.token;
-  } catch (error) {
-    if (error instanceof ResponseStatusError && error.status === 401) {
-      console.warn("Unauthorized access");
-    }
-    throw error;
-  }
-};
-```
-
----
-
-### 3. Internationalization (Vue I18n) & RTL Support
-
-The project includes pre-configured internationalization supporting dynamic language switching, datetime localization, and bidirectional text flow (LTR/RTL).
-
-#### Adding a New Translation Key
-1. Add the key in `src/locales/en-US.json`:
-   ```json
-   {
-     "welcome": "Welcome",
-     "dashboard": "Dashboard"
-   }
-   ```
-2. Add the corresponding key in `src/locales/zh-CN.json`:
-   ```json
-   {
-     "welcome": "欢迎",
-     "dashboard": "仪表板"
-   }
-   ```
-
-#### Adding a New Language
-1. Add the code to `LocaleCode` in `src/const/locale.ts`:
-   ```typescript
-   export enum LocaleCode {
-     ZH_CN = "zh-CN",
-     EN_US = "en-US",
-     AR_SA = "ar-SA", // Example: Arabic
-   }
-
-   export const LOCALE = {
-     [LocaleCode.ZH_CN]: { dir: "ltr", name: "中文" },
-     [LocaleCode.EN_US]: { dir: "ltr", name: "English" },
-     [LocaleCode.AR_SA]: { dir: "rtl", name: "العربية" },
-   } as const;
-   ```
-2. Create the file `src/locales/ar-SA.json`.
-3. When selected in `LocaleChanger.vue`, `setDocumentLang` will automatically set `<html dir="rtl">` and `<html lang="ar-SA">`.
-
-#### Checking for Missing Translations
-Run the extraction tool anytime to find missing or unused keys:
-```bash
-npm run i18n:report
-```
-
----
-
-### 4. Routing, SEO & Dynamic Titles
-
-Routes are defined in `src/router/routes/` with strongly typed route enums in `src/router/routes.enum.ts`.
-
-#### Defining a Route:
-```typescript
-// src/router/routes/homeRoute.ts
-import { Route } from "@/router/routes.enum";
-import HomeView from "@/views/HomeView.vue";
-
-export const homeRoute = {
-  name: Route.Home,
-  path: "/",
-  alias: "/home",
-  component: HomeView,
-  meta: {
-    metaTags: [{ name: "description", content: "Home page description" }],
-  },
-};
-```
-
-#### Automatic Page Title Updates & Scroll Behavior
-In `src/plugins/router.ts`, route transitions automatically update the document title and smoothly handle scroll restoration:
-- Smooth scrolling to anchor hashes (e.g., `#section-1`).
-- Saved position restoration on browser back/forward navigation.
-- Automatic reset to `{ top: 0 }` on new page visits.
-
----
-
-### 5. Testing Strategy (Cypress & Vitest)
-
-#### Component Testing with Cypress
-Mount components in isolation with Pinia and i18n plugins:
-
-```typescript
-// src/components/__tests__/LocaleChanger.cy.ts
-import { createPinia } from "pinia";
-import i18n from "@/plugins/i18n";
-import LocaleChanger from "../LocaleChanger.vue";
-import { LocaleCode } from "@/const/locale";
-
-describe("Locale Changer Component", () => {
-  it("Should change locale to 中文", () => {
-    cy.mount(LocaleChanger, {
-      extensions: { use: [i18n, createPinia()] },
-    });
-
-    cy.dataCy("locale-changer")
-      .get("select")
-      .select("中文")
-      .should("have.value", LocaleCode.ZH_CN);
-  });
-});
-```
-
-#### End-to-End Testing with Cypress
-Mock network responses and assert full application behavior:
-
-```typescript
-// cypress/e2e/home.cy.ts
-describe("Home Page E2E", () => {
-  it("should intercept network request and render message", () => {
-    cy.intercept("GET", "https://dummyjson.com/http/200/Hello%20World", {
-      statusCode: 200,
-      fixture: "../fixtures/data.json",
-    }).as("getData");
-
-    cy.visit("/home")
-      .wait("@getData")
-      .dataCy("home-content")
-      .should("exist")
-      .should("contain.text", "Hello World");
-  });
-});
-```
-
-> [!TIP]
-> Use the custom `cy.dataCy('element-id')` command instead of CSS classes or brittle tag selectors to ensure tests are resilient to styling refactors.
-
----
-
-### 6. Keycloak Styles Bundler
-
-The template includes a dedicated Vite build configuration (`vite-keycloak.config.js`) configured to compile custom styles for Keycloak login pages:
-
-- **Source**: `src/keycloak.ts` (imports `src/styles/keycloak.scss`)
-- **Target**: ESNext library bundle
-- **Config**: `vite-keycloak.config.js`
-
-To run the Keycloak build:
-```bash
-npx vite build --config vite-keycloak.config.js
-```
-
----
-
-## ⚙️ Configuration Reference
-
-### TypeScript Aliases (`tsconfig.json`)
-- `@/*` resolves to `src/*`
-- `@cy/*` resolves to `cypress/*`
-
-### ESLint Rules (`.eslintrc.js`)
-- Extends:
-  - `@tanstack/eslint-plugin-query/recommended`
-  - `plugin:vue/vue3-essential`
-  - `eslint:recommended`
-  - `@vue/eslint-config-typescript/recommended`
-  - `@vue/eslint-config-prettier`
-  - `plugin:cypress/recommended` (for `*.cy.ts` test files)
-
----
-
-## 🤝 Contributing
-
-Contributions, issues, and feature requests are welcome!
-
-1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your Changes (`git commit -m 'feat: add some AmazingFeature'`)
-4. Run Linter & Tests (`npm run lint && npm run test:unit`)
-5. Push to the Branch (`git push origin feature/AmazingFeature`)
-6. Open a Pull Request
-
----
-
 ## 👥 Authors & Acknowledgments
 
+- **Rakesh Mishra** - [GitHub Profile](https://github.com/mishrarakesh-1902)
 - **Miguel Bento** - [mr-monkey.net](https://mr-monkey.net/)
 - **Joost Kersjes**
 
@@ -573,4 +316,4 @@ Contributions, issues, and feature requests are welcome!
 
 ## 📄 License
 
-This project is licensed under the **MIT License** - see the [LICENSE](file:///c:/Users/mishr/Downloads/ts-vite-vue-3-pinia-cypress-vitest-vue-query-eslint-prettier-sass-i18n-main/ts-vite-vue-3-pinia-cypress-vitest-vue-query-eslint-prettier-sass-i18n-main/package.json) file for details.
+This project is licensed under the **MIT License** - see the `LICENSE` file for details.

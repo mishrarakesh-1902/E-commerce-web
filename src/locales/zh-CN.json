@@ -1,7 +1,12 @@
 {
-  "welcome": "欢迎",
+  "welcome": "欢迎光临电商商城",
   "home": "首页",
-  "404": "未找到",
-  "loading": "加载中",
-  "error": "发生错误"
+  "products": "商品列表",
+  "cart": "购物车",
+  "404": "页面未找到",
+  "loading": "加载中...",
+  "error": "发生错误",
+  "add_to_cart": "加入购物车",
+  "checkout": "去结算",
+  "empty_cart": "您的购物车是空的。"
 }

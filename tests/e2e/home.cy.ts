@@ -2,7 +2,7 @@ describe("home page", () => {
   it("should fetch data", () => {
     cy.intercept("GET", "https://dummyjson.com/http/200/Hello%20World", {
       statusCode: 200,
-      fixture: "../fixtures/data.json",
+      fixture: "data.json",
     }).as("data");
 
     cy.visit("/home")
@@ -16,3 +16,5 @@ describe("home page", () => {
       .should("contain.text", "Hello World");
   });
 });
+
+export {};

@@ -24,7 +24,11 @@ module.exports = {
   },
   overrides: [
     {
-      files: ["**/__tests__/*.cy.ts", "cypress/integration/**.cy.ts"],
+      files: [
+        "**/__tests__/*.cy.ts",
+        "tests/e2e/**/*.cy.ts",
+        "cypress/integration/**.cy.ts",
+      ],
       extends: ["plugin:cypress/recommended"],
     },
   ],

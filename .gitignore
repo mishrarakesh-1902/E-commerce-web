@@ -53,6 +53,9 @@ out/
 # ==========================================
 coverage/
 .vitest-cache/
+tests/videos/
+tests/screenshots/
+tests/downloads/
 cypress/videos/
 cypress/screenshots/
 cypress/downloads/

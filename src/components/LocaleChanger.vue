@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { LOCALE, LocaleCode } from "@/const/locale";
-import { setLocalStorageLocale } from "@/util/setLocalStorageLocale";
-import { setDocumentLang } from "@/util/setDocumentLang";
+import { LOCALE, LocaleCode } from "@/constants/locale";
+import { setLocalStorageLocale } from "@/utils/setLocalStorageLocale";
+import { setDocumentLang } from "@/utils/setDocumentLang";
 import { Ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 const { locale } = useI18n();

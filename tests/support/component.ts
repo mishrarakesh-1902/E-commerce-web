@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // https://on.cypress.io/configuration
 
 import "./commands";
@@ -9,8 +10,8 @@ import "@/styles/boot.scss";
 
 // Custom mount command that exposes the Vue Test Utils wrapper
 // https://docs.cypress.io/guides/component-testing/custom-mount-vue
-Cypress.Commands.add("mount", (...args) => {
-  return mount(...args).then((wrapper) => {
+Cypress.Commands.add("mount", (component: any, options: any = {}) => {
+  return mount(component, options).then((wrapper) => {
     return cy.wrap(wrapper).as("vue");
   });
 });
@@ -19,3 +20,5 @@ Cypress.Commands.add("mount", (...args) => {
 Cypress.Commands.add("vueWrapper", () => {
   return cy.get<Cypress.Cypress["vueWrapper"]>("@vue");
 });
+
+export {};
